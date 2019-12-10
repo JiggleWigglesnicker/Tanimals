@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Tanimals</string>
+    <string name="LogoName">Logo</string>
+    <string name="signinbut">Sign In</string>
+    <string name="signup">Have no account yet? Sign Up</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+</resources>
