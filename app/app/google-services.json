@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "294070958843-j69f1fnm28bdmg1sordhg3hjmitfqe3r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tanimals",
+            "certificate_hash": "c6e45fbec67c3e6fe6a1eed296953ba803ac40fb"
+          }
+        },
+        {
           "client_id": "294070958843-8bjghav3cod2pttbhue6fv1g5fai1an6.apps.googleusercontent.com",
           "client_type": 3
         }
