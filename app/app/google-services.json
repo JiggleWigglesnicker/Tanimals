@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "294070958843",
+    "firebase_url": "https://tanimals.firebaseio.com",
+    "project_id": "tanimals",
+    "storage_bucket": "tanimals.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:294070958843:android:67a84485401cffd62ece5e",
+        "android_client_info": {
+          "package_name": "com.example.tanimals"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "294070958843-8bjghav3cod2pttbhue6fv1g5fai1an6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDIn4Y5NNJOQL1fIkmrq-mkQibCqDOCrKY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "294070958843-8bjghav3cod2pttbhue6fv1g5fai1an6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
