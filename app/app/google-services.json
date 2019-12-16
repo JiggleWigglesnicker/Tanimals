@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "294070958843-05m0ns6gd7bhk1assdto6m382ots59an.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tanimals",
+            "certificate_hash": "caa63ad3895a78195957d20556b8bac08a866328"
+          }
+        },
+        {
+          "client_id": "294070958843-cl18u5ss5j38r0hst7364libuan9pi6q.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tanimals",
+            "certificate_hash": "6a8739de044af603818504cf0d674576b6fb7cd9"
+          }
+        },
+        {
           "client_id": "294070958843-j69f1fnm28bdmg1sordhg3hjmitfqe3r.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
