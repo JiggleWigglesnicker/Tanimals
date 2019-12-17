@@ -11,4 +11,7 @@
     <string name="profbut">My Profile</string>
     <string name="chatbut">Chats</string>
     <string name="logoutBut">Logout</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
