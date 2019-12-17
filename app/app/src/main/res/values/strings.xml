@@ -10,4 +10,12 @@
     <string name="profbut">My Profile</string>
     <string name="chatbut">Chats</string>
     <string name="logoutBut">Logout</string>
+    <string name="name">Name</string>
+    <string name="dateOfBirth">20–04–1969</string>
+    <string name="breed">Breed</string>
+    <string name="address">City</string>
+    <string name="avatar">Avatar</string>
+    <string name="male">Male</string>
+    <string name="female">Female</string>
+    <string name="other">Other</string>
 </resources>
