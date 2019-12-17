@@ -6,4 +6,8 @@
     <string name="signupbut">Sign Up</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="matchesbut">Find Matches</string>
+    <string name="profbut">My Profile</string>
+    <string name="chatbut">Chats</string>
+    <string name="logoutBut">Logout</string>
 </resources>
