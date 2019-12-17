@@ -24,6 +24,10 @@ android {
     }
 }
 
+repositories {
+    maven { url "https://raw.githubusercontent.com/sendbird/SendBird-SDK-Android/master/" }
+}
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -36,5 +40,6 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.firebase:firebase-analytics:17.2.1'
+    implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.111'
 }
 apply plugin: 'com.google.gms.google-services'
