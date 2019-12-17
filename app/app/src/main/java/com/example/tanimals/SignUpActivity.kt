@@ -23,6 +23,11 @@ class SignUpActivity : AppCompatActivity() {
             signUpUser()
         }
 
+        signintext.setOnClickListener{
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+        }
+
     }
 
     fun signUpUser(){
@@ -53,8 +58,6 @@ class SignUpActivity : AppCompatActivity() {
                     Toast.makeText(baseContext, "Authentication failed.",
                         Toast.LENGTH_SHORT).show()
                 }
-
-                // ...
             }
     }
 
