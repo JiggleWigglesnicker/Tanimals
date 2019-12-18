@@ -46,9 +46,6 @@ class LoginActivity : AppCompatActivity() {
             if(currentUser != null){
                 startActivity(Intent(this,DashboardActivity::class.java))
                 finish()
-            } else{
-                Toast.makeText(baseContext, "Login failed.",
-                    Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -77,10 +74,9 @@ class LoginActivity : AppCompatActivity() {
                     val user = auth.currentUser
                     updateUI(user)
                 } else {
-                    updateUI(null)
+                    Toast.makeText(baseContext, "Login failed.",
+                        Toast.LENGTH_SHORT).show()
                 }
-
-                // ...
             }
     }
 

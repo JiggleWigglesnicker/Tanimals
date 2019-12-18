@@ -2,6 +2,7 @@
     <string name="app_name">Tanimals</string>
     <string name="LogoName">Logo</string>
     <string name="signup">Have no account yet? Sign Up</string>
+    <string name="signin">Already have an account? Sign In</string>
     <string name="signinbut">Sign In</string>
     <string name="signupbut">Sign Up</string>
     <string name="username">Username</string>
@@ -34,4 +35,7 @@
     <string name="attachment_summary_on">Automatically download attachments for incoming emails
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="ProfileFragment">THIS IS THE PROFILE FRAGMENT</string>
 </resources>
