@@ -19,6 +19,8 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="other">Other</string>
+    <string name="choosePic">Choose picture</string>
+    <string name="takePic">Take picture</string>
     <string name="title_activity_profile">Profile</string>
 
     <!-- Preference Titles -->
