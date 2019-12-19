@@ -14,8 +14,10 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.FileProvider
 import com.google.firebase.ml.vision.FirebaseVision
@@ -29,6 +31,8 @@ import java.util.*
 class ProfileActivity : AppCompatActivity() {
 
     lateinit var imageView: ImageView
+    lateinit var spinner: Spinner
+    var breedArray = arrayOf<String>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -38,7 +42,11 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         imageView = findViewById(R.id.avatar)
-        // set on-click listener
+        imageView.setImageResource(R.drawable.avatar)
+
+        spinner = findViewById(R.id.positionSpinner)
+
+
     }
 
     private var cameraImage: Bitmap? = null
@@ -106,16 +114,19 @@ class ProfileActivity : AppCompatActivity() {
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
         val image = FirebaseVisionImage.fromBitmap(bitmap)
 
-        val labeler = FirebaseVision.getInstance().getCloudImageLabeler()
+        val labeler = FirebaseVision.getInstance().cloudImageLabeler
 
         labeler.processImage(image)
             .addOnSuccessListener { labels ->
+                breedArray = arrayOf()
                 for (label in labels) {
                     val text = label.text
                     val entityId = label.entityId
                     val confidence = label.confidence
-                    println(text)
+                    breedArray += text
                 }
+                val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,breedArray)
+                spinner.adapter = aa
             }
             .addOnFailureListener { e ->
                 // Task failed with an exception

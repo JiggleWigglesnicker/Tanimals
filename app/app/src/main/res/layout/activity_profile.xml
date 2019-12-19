@@ -27,7 +27,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:srcCompat="@tools:sample/avatars" />
+        tools:srcCompat="@tools:sample/avatars[2]" />
 
     <EditText
         android:id="@+id/name"
@@ -54,18 +54,6 @@
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
     <EditText
-        android:id="@+id/breed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:autofillHints=""
-        android:ems="10"
-        android:hint="@string/breed"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/dateOfBirth"
-        app:layout_constraintTop_toBottomOf="@+id/dateOfBirth" />
-
-    <EditText
         android:id="@+id/address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,8 +62,8 @@
         android:ems="10"
         android:hint="@string/address"
         android:inputType="textPostalAddress"
-        app:layout_constraintStart_toStartOf="@+id/breed"
-        app:layout_constraintTop_toBottomOf="@+id/breed" />
+        app:layout_constraintStart_toStartOf="@+id/positionSpinner"
+        app:layout_constraintTop_toBottomOf="@+id/positionSpinner" />
 
     <RadioGroup
         android:id="@+id/radioGroup"
@@ -115,5 +103,14 @@
         app:layout_constraintEnd_toEndOf="@+id/address"
         app:layout_constraintStart_toEndOf="@+id/radioGroup"
         app:layout_constraintTop_toBottomOf="@+id/address" />
+
+    <Spinner
+        android:id="@+id/positionSpinner"
+        style="@style/Base.Widget.AppCompat.Spinner.Underlined"
+        android:layout_width="216dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="@+id/dateOfBirth"
+        app:layout_constraintTop_toBottomOf="@+id/dateOfBirth" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -41,7 +41,6 @@ class LoginActivity : AppCompatActivity() {
             val currentUser = auth.currentUser
             updateUI(currentUser)
         }
-
         private fun updateUI(currentUser: FirebaseUser?){
             if(currentUser != null){
                 startActivity(Intent(this,DashboardActivity::class.java))

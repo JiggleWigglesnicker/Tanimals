@@ -17,5 +17,9 @@ class DashboardActivity : AppCompatActivity() {
             startActivity(Intent(this, LoginActivity::class.java))
             finish()
         }
+
+        profilebut.setOnClickListener{
+            startActivity(Intent(this, ProfileActivity::class.java))
+        }
     }
 }
