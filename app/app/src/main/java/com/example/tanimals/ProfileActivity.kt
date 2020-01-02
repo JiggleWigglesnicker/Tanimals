@@ -1,80 +1,57 @@
 package com.example.tanimals
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
-import android.content.res.Resources
-import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
-import android.media.Image
-import android.media.ImageReader
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
-import android.provider.MediaStore
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.FileProvider
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
-import java.io.File
-import java.io.IOException
-import java.net.URI
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ProfileActivity : AppCompatActivity() {
-
+    companion object {
+        private const val TAG = "ClassName"
+    }
+    val user = FirebaseAuth.getInstance().currentUser
     lateinit var imageView: ImageView
     lateinit var spinner: Spinner
     var breedArray = arrayOf<String>()
+    private val db = FirebaseFirestore.getInstance()
+    lateinit var nameField: EditText
+    lateinit var dateField: EditText
+    lateinit var placeField: EditText
+    lateinit var genderGroup: RadioGroup
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
-//        val fbVisionImg = FirebaseVisionImage.fromBitmap(bitmap)
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
         imageView = findViewById(R.id.avatar)
         imageView.setImageResource(R.drawable.avatar)
-
         spinner = findViewById(R.id.positionSpinner)
+        nameField = findViewById(R.id.name)
+        dateField = findViewById(R.id.dateOfBirth)
+        placeField = findViewById(R.id.address)
+        genderGroup = findViewById(R.id.radioGroup)
 
-
-    }
-
-    private var cameraImage: Bitmap? = null
-    val REQUEST_TAKE_PHOTO = 1
-
-    fun dispatchTakePictureIntent(v: View) {
-        Intent(MediaStore.ACTION_IMAGE_CAPTURE).also { takePictureIntent ->
-            // Ensure that there's a camera activity to handle the intent
-            takePictureIntent.resolveActivity(packageManager)?.also {
-                // Create the File where the photo should go
-                val photoFile: File? = try {
-                    createImageFile()
-                } catch (ex: IOException) {
-                    // Error occurred while creating the File
-                    null
-                }
-                // Continue only if the File was successfully created
-                photoFile?.also {
-                    val photoURI: Uri = FileProvider.getUriForFile(
-                        this,
-                        "com.example.android.fileprovider",
-                        it
-                    )
-                    takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
-                    startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO)
+        val docRef = db.collection("user").document(user!!.uid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    nameField.setText(document.data?.get("name").toString())
+                    dateField.setText(document.data?.get("dob").toString())
+                    placeField.setText(document.data?.get("place").toString())
+                    genderGroup.check(document.data?.get("gender").toString().toInt())
+                    //spinner moet nog
                 }
             }
-        }
     }
 
     fun selectImage(v: View) {
@@ -82,6 +59,25 @@ class ProfileActivity : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Select Picture"), 1)
+    }
+
+    fun saveProfile(v: View) {
+        val checkedRadio = genderGroup.checkedRadioButtonId
+
+        val profile = hashMapOf(
+            "name" to nameField.text.toString(),
+            "dob" to dateField.text.toString(),
+            "race" to spinner.selectedItem.toString(),
+            "place" to placeField.text.toString(),
+            "gender" to checkedRadio
+        )
+
+        if (user != null) {
+            db.collection("user").document(user.uid)
+                .set(profile)
+                .addOnSuccessListener { Log.d(TAG, "DocumentSnapshot successfully written!") }
+                .addOnFailureListener { e -> Log.w(TAG, "Error writing document", e) }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -92,25 +88,7 @@ class ProfileActivity : AppCompatActivity() {
         }
     }
 
-    lateinit var currentPhotoPath: String
-
-    @SuppressLint("SimpleDateFormat")
-    @Throws(IOException::class)
-    private fun createImageFile(): File {
-        // Create an image file name
-        val timeStamp: String = SimpleDateFormat("yyyyMMdd_HHmmss").format(Date())
-        val storageDir: File? = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        return File.createTempFile(
-            "JPEG_${timeStamp}_", /* prefix */
-            ".jpg", /* suffix */
-            storageDir /* directory */
-        ).apply {
-            // Save a file: path for use with ACTION_VIEW intents
-            currentPhotoPath = absolutePath
-        }
-    }
-
-    fun labelBitmapImage() {
+    private fun labelBitmapImage() {
         val bitmap = (imageView.drawable as BitmapDrawable).bitmap
         val image = FirebaseVisionImage.fromBitmap(bitmap)
 

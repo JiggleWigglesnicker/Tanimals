@@ -22,6 +22,7 @@
     <string name="choosePic">Choose picture</string>
     <string name="takePic">Take picture</string>
     <string name="title_activity_profile">Profile</string>
+    <string name="saveBut">Save Profile</string>
 
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>

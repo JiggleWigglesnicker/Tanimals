@@ -12,21 +12,25 @@
         android:id="@+id/chooseButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginStart="24dp"
         android:onClick="selectImage"
         android:text="@string/choosePic"
-        app:layout_constraintStart_toStartOf="@+id/takeButton"
-        app:layout_constraintTop_toBottomOf="@+id/takeButton" />
+        app:layout_constraintStart_toEndOf="@+id/radioGroup"
+        app:layout_constraintTop_toTopOf="@+id/radioGroup" />
 
     <ImageView
         android:id="@+id/avatar"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="24dp"
         android:layout_marginTop="32dp"
+        android:layout_marginEnd="24dp"
         android:contentDescription="@string/avatar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintWidth_percent="0.50"
         tools:srcCompat="@tools:sample/avatars[2]" />
 
     <EditText
@@ -38,7 +42,8 @@
         android:ems="10"
         android:hint="@string/name"
         android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@+id/avatar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/avatar" />
 
     <EditText
@@ -69,7 +74,7 @@
         android:id="@+id/radioGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/address"
         app:layout_constraintTop_toBottomOf="@+id/address">
 
@@ -92,18 +97,6 @@
             android:text="@string/other" />
     </RadioGroup>
 
-    <Button
-        android:id="@+id/takeButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
-        android:onClick="dispatchTakePictureIntent"
-        android:text="@string/takePic"
-        app:layout_constraintEnd_toEndOf="@+id/address"
-        app:layout_constraintStart_toEndOf="@+id/radioGroup"
-        app:layout_constraintTop_toBottomOf="@+id/address" />
-
     <Spinner
         android:id="@+id/positionSpinner"
         style="@style/Base.Widget.AppCompat.Spinner.Underlined"
@@ -112,5 +105,14 @@
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="@+id/dateOfBirth"
         app:layout_constraintTop_toBottomOf="@+id/dateOfBirth" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="saveProfile"
+        android:text="@string/saveBut"
+        app:layout_constraintStart_toStartOf="@+id/chooseButton"
+        app:layout_constraintTop_toBottomOf="@+id/chooseButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
