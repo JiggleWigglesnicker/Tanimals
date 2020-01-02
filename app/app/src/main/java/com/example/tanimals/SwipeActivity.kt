@@ -46,7 +46,6 @@ class CollectionPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm
     override fun getItem(i: Int): Fragment {
         val fragment = ObjectFragment()
         fragment.arguments = Bundle().apply {
-            // Our object is just an integer :-P
             putInt(ARG_OBJECT, i + 1)
         }
         return fragment
