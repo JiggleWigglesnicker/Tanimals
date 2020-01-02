@@ -22,7 +22,7 @@ class SwipeActivity : AppCompatActivity() {
 }
 
 class CollectionFragment : Fragment() {
-    private lateinit var demoCollectionPagerAdapter: DemoCollectionPagerAdapter
+    private lateinit var demoCollectionPagerAdapter: CollectionPagerAdapter
     private lateinit var viewPager: ViewPager
 
     override fun onCreateView(inflater: LayoutInflater,
@@ -32,14 +32,14 @@ class CollectionFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        demoCollectionPagerAdapter = DemoCollectionPagerAdapter(childFragmentManager)
+        demoCollectionPagerAdapter = CollectionPagerAdapter(childFragmentManager)
         viewPager = view.findViewById(R.id.pager)
         viewPager.adapter = demoCollectionPagerAdapter
     }
 }
 
 
-class DemoCollectionPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
+class CollectionPagerAdapter(fm: FragmentManager) : FragmentStatePagerAdapter(fm) {
 
     override fun getCount(): Int  = 100
 
