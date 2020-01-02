@@ -47,5 +47,6 @@ dependencies {
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.111'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.firebase:firebase-firestore:21.3.1'
+    implementation 'com.google.firebase:firebase-storage:19.1.0'
 }
 apply plugin: 'com.google.gms.google-services'

@@ -2,6 +2,7 @@ package com.example.tanimals
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +13,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
+import com.google.firebase.storage.FirebaseStorage
+import java.io.ByteArrayOutputStream
 
 class ProfileActivity : AppCompatActivity() {
     companion object {
@@ -26,12 +29,14 @@ class ProfileActivity : AppCompatActivity() {
     lateinit var dateField: EditText
     lateinit var placeField: EditText
     lateinit var genderGroup: RadioGroup
+    lateinit var storage: FirebaseStorage
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
+        storage = FirebaseStorage.getInstance()
 
         imageView = findViewById(R.id.avatar)
         imageView.setImageResource(R.drawable.avatar)
@@ -49,7 +54,7 @@ class ProfileActivity : AppCompatActivity() {
                     dateField.setText(document.data?.get("dob").toString())
                     placeField.setText(document.data?.get("place").toString())
                     genderGroup.check(document.data?.get("gender").toString().toInt())
-                    //spinner moet nog
+
                 }
             }
     }
@@ -105,6 +110,22 @@ class ProfileActivity : AppCompatActivity() {
                 }
                 val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,breedArray)
                 spinner.adapter = aa
+
+                var storageRef = storage.reference
+                val animalImageref = storageRef.child("avatars/"+ user!!.uid +".png")
+
+                val baos = ByteArrayOutputStream()
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos)
+                val data = baos.toByteArray()
+
+                var uploadTask = animalImageref.putBytes(data)
+                uploadTask.addOnFailureListener {
+                    // Handle unsuccessful uploads
+                }.addOnSuccessListener {
+                    // taskSnapshot.metadata contains file metadata such as size, content-type, etc.
+                    // ...
+                }
+
             }
             .addOnFailureListener { e ->
                 // Task failed with an exception
