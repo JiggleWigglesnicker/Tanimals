@@ -50,6 +50,7 @@ class ProfileActivity : AppCompatActivity() {
         dateField = findViewById(R.id.dateOfBirth)
         placeField = findViewById(R.id.address)
         genderGroup = findViewById(R.id.radioGroup)
+        genderGroup.check("2131296381".toInt())
 
 
         val docRef = db.collection("user").document(user!!.uid)
@@ -86,6 +87,10 @@ class ProfileActivity : AppCompatActivity() {
     fun saveProfile(v: View) {
         val checkedRadio = genderGroup.checkedRadioButtonId
 
+        if(nameField.text.toString() == "" || dateField.text.toString() == "" || spinner.selectedItem == null || placeField.text.toString() == ""){
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
+            return
+        }
         val profile = hashMapOf(
             "name" to nameField.text.toString(),
             "dob" to dateField.text.toString(),
@@ -104,8 +109,8 @@ class ProfileActivity : AppCompatActivity() {
 
     // Extension method to resize bitmap to maximum width and height
     private fun Bitmap.scale(maxWidthAndHeight:Int):Bitmap{
-        var newWidth = 0
-        var newHeight = 0
+        val newWidth: Int
+        val newHeight: Int
 
         if (this.width >= this.height){
             val ratio:Float = this.width.toFloat() / this.height.toFloat()
@@ -148,8 +153,8 @@ class ProfileActivity : AppCompatActivity() {
                 breedArray = arrayOf()
                 for (label in labels) {
                     val text = label.text
-                    val entityId = label.entityId
-                    val confidence = label.confidence
+//                    val entityId = label.entityId
+//                    val confidence = label.confidence
                     breedArray += text
                 }
                 val aa = ArrayAdapter(this,android.R.layout.simple_spinner_item,breedArray)
