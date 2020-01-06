@@ -50,11 +50,13 @@ class SwipeActivity : AppCompatActivity() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document != null) {
+
                     animalName.setText(document.data?.get("name").toString())
                     animalAge.setText(document.data?.get("dob").toString())
                     animalLocation.setText(document.data?.get("place").toString())
                     animalGender.setText(document.data?.get("gender").toString())
                     animalRace.setText(document.data?.get("race").toString())
+
                 }
             }
 
