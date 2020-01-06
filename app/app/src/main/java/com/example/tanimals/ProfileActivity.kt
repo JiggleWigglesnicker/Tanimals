@@ -44,7 +44,6 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         imageView = findViewById(R.id.avatar)
-        imageView.setImageResource(R.drawable.avatar)
         spinner = findViewById(R.id.positionSpinner)
         nameField = findViewById(R.id.name)
         dateField = findViewById(R.id.dateOfBirth)
@@ -69,7 +68,7 @@ class ProfileActivity : AppCompatActivity() {
                         }
 
                     nameField.setText(document.data?.get("name").toString())
-                    dateField.setText(document.data?.get("dob").toString())
+                    dateField.setText(document.data?.get("dob").toString().replace(Regex("(..)(..)(....)"), "\$1-\$2-\$3"))
                     placeField.setText(document.data?.get("place").toString())
                     genderGroup.check(document.data?.get("gender").toString().toInt())
 
@@ -92,10 +91,10 @@ class ProfileActivity : AppCompatActivity() {
             return
         }
         val profile = hashMapOf(
-            "name" to nameField.text.toString(),
-            "dob" to dateField.text.toString(),
-            "race" to spinner.selectedItem.toString(),
-            "place" to placeField.text.toString(),
+            "name" to nameField.text.toString().filter { it.isLetter() || it.isWhitespace() },
+            "dob" to dateField.text.toString().filter { it.isDigit() },
+            "race" to spinner.selectedItem.toString().filter { it.isLetter() },
+            "place" to placeField.text.toString().filter { it.isLetter() },
             "gender" to checkedRadio
         )
 
