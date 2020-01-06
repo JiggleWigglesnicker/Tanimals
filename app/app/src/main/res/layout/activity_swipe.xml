@@ -4,6 +4,94 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/gradient"
     tools:context=".SwipeActivity">
 
+    <ImageView
+        android:id="@+id/avatar_Animal"
+        android:layout_width="406dp"
+        android:layout_height="227dp"
+        android:layout_marginEnd="3dp"
+        android:contentDescription="ProfilePic"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/avatar" />
+
+    <TextView
+        android:id="@+id/name_Animal"
+        android:layout_width="256dp"
+        android:layout_height="31dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="102dp"
+        android:text="Profile Name"
+        app:layout_constraintBottom_toTopOf="@+id/age_Animal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/avatar_Animal" />
+
+    <TextView
+        android:id="@+id/age_Animal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="12dp"
+        android:text="Age "
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/gender_Animal" />
+
+    <TextView
+        android:id="@+id/gender_Animal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="64dp"
+        android:layout_marginBottom="19dp"
+        android:text="Gender"
+        app:layout_constraintBottom_toTopOf="@+id/age_Animal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/name_Animal" />
+
+    <Button
+        android:id="@+id/button_Like"
+        android:layout_width="138dp"
+        android:layout_height="123dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="17dp"
+        android:backgroundTint="#18D521"
+        android:text="Like"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button_Dislike"
+        android:layout_width="139dp"
+        android:layout_height="122dp"
+        android:layout_marginStart="37dp"
+        android:layout_marginBottom="17dp"
+        android:backgroundTint="#F43535"
+        android:text="Dislike"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/race_Animal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginBottom="12dp"
+        android:text="Race"
+        app:layout_constraintBottom_toTopOf="@+id/location_Animal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/age_Animal" />
+
+    <TextView
+        android:id="@+id/location_Animal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="20dp"
+        android:text="location"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/race_Animal" />
 </androidx.constraintlayout.widget.ConstraintLayout>
