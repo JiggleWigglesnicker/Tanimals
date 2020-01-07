@@ -55,7 +55,7 @@ class ProfileActivity : AppCompatActivity() {
         val docRef = db.collection("user").document(user!!.uid)
         docRef.get()
             .addOnSuccessListener { document ->
-                if (document != null) {
+                if (document.data != null) {
                     val ONE_MEGABYTE = 1024 * 1024.toLong()
                     animalImageref.getBytes(ONE_MEGABYTE)
                         .addOnSuccessListener { bytes ->
@@ -71,7 +71,6 @@ class ProfileActivity : AppCompatActivity() {
                     dateField.setText(document.data?.get("dob").toString().replace(Regex("(..)(..)(....)"), "\$1-\$2-\$3"))
                     placeField.setText(document.data?.get("place").toString())
                     genderGroup.check(document.data?.get("gender").toString().toInt())
-
                 }
             }
     }
