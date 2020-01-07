@@ -36,6 +36,7 @@ class SwipeActivity : AppCompatActivity() {
         likeB = findViewById(R.id.button_Like);
         dislikeB = findViewById(R.id.button_Dislike);
 
+        // keeps giving nullpointer exception
         fun nextProfile(){
             val docRef = db.collection("user").document(user!!.uid)
             db.collection("user")
@@ -53,13 +54,13 @@ class SwipeActivity : AppCompatActivity() {
         dislikeB.setOnClickListener{
             // skip to next profile in firebase
             likeB.text = "WIlly Small BOy";
-            //nextProfile();
+            nextProfile();
         }
 
         likeB.setOnClickListener{
             // store like and match if both user like eachother
             dislikeB.text = "WIlly Big BOy";
-            //nextProfile();
+            nextProfile();
         }
     }
 }
