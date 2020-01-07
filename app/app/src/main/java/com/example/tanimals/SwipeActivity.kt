@@ -52,13 +52,14 @@ class SwipeActivity : AppCompatActivity() {
 
         dislikeB.setOnClickListener{
             // skip to next profile in firebase
-
-            nextProfile();
+            likeB.text = "WIlly Small BOy";
+            //nextProfile();
         }
 
         likeB.setOnClickListener{
             // store like and match if both user like eachother
-            nextProfile();
+            dislikeB.text = "WIlly Big BOy";
+            //nextProfile();
         }
     }
 }
