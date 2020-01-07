@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -35,7 +37,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
-    private val animalImageref = storageRef.child("avatars/"+ user!!.uid +".png")
+    private val animalImageref = storageRef.child("users/"+ user!!.uid +"/profilePicture.png")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,6 +75,32 @@ class ProfileActivity : AppCompatActivity() {
                     genderGroup.check(document.data?.get("gender").toString().toInt())
                 }
             }
+        dateField.addTextChangedListener(object : TextWatcher {
+            var prevL = 0
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+                prevL = dateField.text.toString().length
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                val length = editable.length
+                if (prevL < length && (length == 2 || length == 5)) {
+                    editable.append("-")
+                }
+            }
+        })
     }
 
     fun selectImage(v: View) {
@@ -131,6 +159,8 @@ class ProfileActivity : AppCompatActivity() {
             false
         )
     }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
