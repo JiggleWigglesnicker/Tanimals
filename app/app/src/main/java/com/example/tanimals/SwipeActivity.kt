@@ -1,6 +1,5 @@
 package com.example.tanimals
 
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -37,36 +36,31 @@ class SwipeActivity : AppCompatActivity() {
         likeB = findViewById(R.id.button_Like);
         dislikeB = findViewById(R.id.button_Dislike);
 
-        val docRef = db.collection("user").document(user!!.uid)
-        db.collection("user")
-            .get()
-            .addOnSuccessListener { result ->
-                for (document in result) {
-                    Log.d(null, "${document.id} => ${document.data}")
-                    documentMap["${document.id}"] = "${document.data}";
+        // keeps giving nullpointer exception
+        fun nextProfile(){
+            val docRef = db.collection("user").document(user!!.uid)
+            db.collection("user")
+                .get()
+                .addOnSuccessListener { result ->
+                    for (document in result) {
+                        Log.d(null, "${document.id} => ${document.data}")
+                        ///make sure array works
+                        documentMap["${document.id}"] = "${document.data}";
+
+                    }
                 }
-            }
-
-        docRef.get()
-            .addOnSuccessListener { document ->
-                if (document != null) {
-
-                    animalName.setText(document.data?.get("name").toString())
-                    animalAge.setText(document.data?.get("dob").toString())
-                    animalLocation.setText(document.data?.get("place").toString())
-                    animalGender.setText(document.data?.get("gender").toString())
-                    animalRace.setText(document.data?.get("race").toString())
-
-                }
-            }
+        }
 
         dislikeB.setOnClickListener{
             // skip to next profile in firebase
-
+            likeB.text = "WIlly Small BOy";
+            nextProfile();
         }
 
         likeB.setOnClickListener{
             // store like and match if both user like eachother
+            dislikeB.text = "WIlly Big BOy";
+            nextProfile();
         }
     }
 }

@@ -6,6 +6,8 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -35,7 +37,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
-    private val animalImageref = storageRef.child("avatars/"+ user!!.uid +".png")
+    private val animalImageref = storageRef.child("users/"+ user!!.uid +"/profilePicture.png")
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,7 +46,6 @@ class ProfileActivity : AppCompatActivity() {
         setContentView(R.layout.activity_profile)
 
         imageView = findViewById(R.id.avatar)
-        imageView.setImageResource(R.drawable.avatar)
         spinner = findViewById(R.id.positionSpinner)
         nameField = findViewById(R.id.name)
         dateField = findViewById(R.id.dateOfBirth)
@@ -56,7 +57,7 @@ class ProfileActivity : AppCompatActivity() {
         val docRef = db.collection("user").document(user!!.uid)
         docRef.get()
             .addOnSuccessListener { document ->
-                if (document != null) {
+                if (document.data != null) {
                     val ONE_MEGABYTE = 1024 * 1024.toLong()
                     animalImageref.getBytes(ONE_MEGABYTE)
                         .addOnSuccessListener { bytes ->
@@ -69,12 +70,37 @@ class ProfileActivity : AppCompatActivity() {
                         }
 
                     nameField.setText(document.data?.get("name").toString())
-                    dateField.setText(document.data?.get("dob").toString())
+                    dateField.setText(document.data?.get("dob").toString().replace(Regex("(..)(..)(....)"), "\$1-\$2-\$3"))
                     placeField.setText(document.data?.get("place").toString())
                     genderGroup.check(document.data?.get("gender").toString().toInt())
-
                 }
             }
+        dateField.addTextChangedListener(object : TextWatcher {
+            var prevL = 0
+            override fun beforeTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+                prevL = dateField.text.toString().length
+            }
+
+            override fun onTextChanged(
+                charSequence: CharSequence,
+                i: Int,
+                i1: Int,
+                i2: Int
+            ) {
+            }
+
+            override fun afterTextChanged(editable: Editable) {
+                val length = editable.length
+                if (prevL < length && (length == 2 || length == 5)) {
+                    editable.append("-")
+                }
+            }
+        })
     }
 
     fun selectImage(v: View) {
@@ -92,10 +118,10 @@ class ProfileActivity : AppCompatActivity() {
             return
         }
         val profile = hashMapOf(
-            "name" to nameField.text.toString(),
-            "dob" to dateField.text.toString(),
-            "race" to spinner.selectedItem.toString(),
-            "place" to placeField.text.toString(),
+            "name" to nameField.text.toString().filter { it.isLetter() || it.isWhitespace() },
+            "dob" to dateField.text.toString().filter { it.isDigit() },
+            "race" to spinner.selectedItem.toString().filter { it.isLetter() },
+            "place" to placeField.text.toString().filter { it.isLetter() },
             "gender" to checkedRadio
         )
 
@@ -133,6 +159,8 @@ class ProfileActivity : AppCompatActivity() {
             false
         )
     }
+
+
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
