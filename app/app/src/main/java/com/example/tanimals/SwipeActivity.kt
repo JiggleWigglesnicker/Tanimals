@@ -93,7 +93,7 @@ class SwipeActivity : AppCompatActivity() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to true)
             user?.uid?.let {
-                db.collection("user").document(it)
+                db.collection("match").document(it)
                     .set(data, SetOptions.merge())
             }
         } catch (e: java.lang.NullPointerException) {
