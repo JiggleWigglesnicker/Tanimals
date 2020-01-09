@@ -51,19 +51,22 @@ class SwipeActivity : AppCompatActivity() {
         }
 
         try {
-            if (user?.uid != userIdList[userIdCounter]) {
-                db.collection("user").document(userIdList[userIdCounter])
-                    .get()
-                    .addOnSuccessListener { document ->
-                        animalName.text = document.data?.get("name").toString()
-                        animalGender.text = document.data?.get("gender").toString()
-                        animalLocation.text = document.data?.get("location").toString()
-                        animalRace.text = document.data?.get("race").toString()
-                        animalAge.text = document.data?.get("dob").toString()
-                    }
-            } else {
-                counterLimiter()
+            if(userIdList.isNotEmpty()){
+                if (user?.uid != userIdList[userIdCounter]) {
+                    db.collection("user").document(userIdList[userIdCounter])
+                        .get()
+                        .addOnSuccessListener { document ->
+                            animalName.text = document.data?.get("name").toString()
+                            animalGender.text = document.data?.get("gender").toString()
+                            animalLocation.text = document.data?.get("location").toString()
+                            animalRace.text = document.data?.get("race").toString()
+                            animalAge.text = document.data?.get("dob").toString()
+                        }
+                } else {
+                    counterLimiter()
+                }
             }
+
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
         }
@@ -77,6 +80,7 @@ class SwipeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
+                        println(document.id)
                         if (!userIdList.contains(document.id))
                             userIdList.add(document.id)
                     }
