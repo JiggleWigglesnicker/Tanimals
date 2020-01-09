@@ -58,7 +58,7 @@ class SwipeActivity : AppCompatActivity() {
 
     }
 
-    fun picDownload() {
+    private fun picDownload() {
         val TWO_MEGABYTE = 2048 * 2048.toLong()
         animalImageref.getBytes(TWO_MEGABYTE)
             .addOnSuccessListener { bytes ->
@@ -76,6 +76,7 @@ class SwipeActivity : AppCompatActivity() {
                     db.collection("user").document(userIdList[userIdCounter])
                         .get()
                         .addOnSuccessListener { document ->
+                            animalImageref = storageRef.child("users/"+ userIdList[userIdCounter] +"/profilePicture.png")
                             picDownload();
                             animalName.text = document.data?.get("name").toString()
                             animalGender.text = document.data?.get("gender").toString()
@@ -119,6 +120,7 @@ class SwipeActivity : AppCompatActivity() {
                 db.collection("user").document(userIdList[userIdCounter])
                     .get()
                     .addOnSuccessListener { document ->
+                        animalImageref = storageRef.child("users/"+ userIdList[userIdCounter] +"/profilePicture.png")
                         picDownload();
                         animalName.text = document.data?.get("name").toString()
                         animalGender.text = document.data?.get("gender").toString()
