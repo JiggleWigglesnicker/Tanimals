@@ -3,61 +3,56 @@ package com.example.tanimals
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.functions.FirebaseFunctions
-import com.google.firebase.functions.FirebaseFunctionsException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlin.collections.ArrayList
 
 class ChatListActivity : AppCompatActivity() {
     companion object {
-        private const val TAG = "ClassName"
+        private const val TAG = "ChatListActivity"
     }
 
-    private lateinit var functions: FirebaseFunctions
+    private val user = FirebaseAuth.getInstance().currentUser
+    private val db = FirebaseFirestore.getInstance()
+    private val matchArray: ArrayList<String> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_list)
-        functions = FirebaseFunctions.getInstance()
 
-        addMessage("test")
-            .addOnCompleteListener(OnCompleteListener { task ->
-                if (!task.isSuccessful) {
-                    val e = task.exception
-                    if (e is FirebaseFunctionsException) {
-                        val code = e.code
-                        val details = e.details
+
+        val docRef = db.collection("match").document(user!!.uid)
+        docRef.get()
+            .addOnSuccessListener { document ->
+                if (document != null) {
+                    document.data!!.forEach { (k, v) ->
+                        if (v == true) {
+                            // Get matches for matched
+                            val docRef = db.collection("match").document(k)
+                            docRef.get()
+                                .addOnSuccessListener { document ->
+                                    if (document != null) {
+                                        if (document.data?.get(user.uid) != null) {
+                                            if (document.data?.get(user.uid) == true) {
+                                                matchArray.add(k)
+                                            }
+                                        }
+                                    } else {
+                                        Log.d(TAG, "No such document")
+                                    }
+
+                                }
+                                .addOnFailureListener { exception ->
+                                    Log.d(TAG, "get failed with ", exception)
+                                }
+                        }
                     }
-
-                    // [START_EXCLUDE]
-                    Log.w(TAG, "addMessage:onFailure", e)
-                    return@OnCompleteListener
-                    // [END_EXCLUDE]
+                } else {
+                    Log.d(TAG, "No such document")
                 }
-
-                // [START_EXCLUDE]
-                val result = task.result
-                println("banana" + result)
-                // [END_EXCLUDE]
-            })
-    }
-
-    private fun addMessage(text: String): Task<String> {
-        // Create the arguments to the callable function.
-        val data = hashMapOf(
-            "text" to text,
-            "push" to true
-        )
-
-        return functions
-            .getHttpsCallable("helloWorld")
-            .call(data)
-            .continueWith { task ->
-                // This continuation runs on either success or failure, but if the task
-                // has failed then result will throw an Exception which will be
-                // propagated down.
-                val result = task.result?.data as String
-                result
+            }
+            .addOnFailureListener { exception ->
+                Log.d(TAG, "get failed with ", exception)
             }
     }
 }
