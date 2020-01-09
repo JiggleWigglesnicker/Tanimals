@@ -49,6 +49,16 @@ class SwipeActivity : AppCompatActivity() {
             likeAndMatches()
             nextProfile()
         }
+
+        db.collection("user").document(userIdList[userIdCounter])
+            .get()
+            .addOnSuccessListener { document ->
+                animalName.text = document.data?.get("name").toString()
+                animalGender.text = document.data?.get("gender").toString()
+                animalLocation.text = document.data?.get("location").toString()
+                animalRace.text = document.data?.get("race").toString()
+                animalAge.text = document.data?.get("dob").toString()
+            }
     }
 
     private fun putUseridInArray() {
