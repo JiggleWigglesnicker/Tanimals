@@ -66,7 +66,6 @@ class SwipeActivity : AppCompatActivity() {
                     counterLimiter()
                 }
             }
-
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
         }
@@ -80,7 +79,6 @@ class SwipeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        println(document.id)
                         if (!userIdList.contains(document.id))
                             userIdList.add(document.id)
                     }
