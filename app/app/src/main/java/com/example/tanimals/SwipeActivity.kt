@@ -52,17 +52,18 @@ class SwipeActivity : AppCompatActivity() {
 
         try {
             if (user?.uid != userIdList[userIdCounter]) {
-                db.collection("user").document(userIdList[userIdCounter])
-                    .get()
-                    .addOnSuccessListener { document ->
-                        animalName.text = document.data?.get("name").toString()
-                        animalGender.text = document.data?.get("gender").toString()
-                        animalLocation.text = document.data?.get("location").toString()
-                        animalRace.text = document.data?.get("race").toString()
-                        animalAge.text = document.data?.get("dob").toString()
+                        db.collection("user").document(userIdList[userIdCounter])
+                            .get()
+                            .addOnSuccessListener { document ->
+                                profilePic
+                                animalName.text = document.data?.get("name").toString()
+                                animalGender.text = document.data?.get("gender").toString()
+                                animalLocation.text = document.data?.get("location").toString()
+                                animalRace.text = document.data?.get("race").toString()
+                                animalAge.text = document.data?.get("dob").toString()
                     }
             } else {
-                counterLimiter()
+
             }
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
@@ -110,7 +111,7 @@ class SwipeActivity : AppCompatActivity() {
 
     }
 
-    // TODO: likes not appearing in documents
+    // TODO: likes not appearing in match documents
     fun likeAndMatches() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to true)
