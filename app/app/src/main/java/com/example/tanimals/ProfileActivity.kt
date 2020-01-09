@@ -58,8 +58,8 @@ class ProfileActivity : AppCompatActivity() {
         docRef.get()
             .addOnSuccessListener { document ->
                 if (document.data != null) {
-                    val ONE_MEGABYTE = 1024 * 1024.toLong()
-                    animalImageref.getBytes(ONE_MEGABYTE)
+                    val TWO_MEGABYTE = 2048 * 2048.toLong()
+                    animalImageref.getBytes(TWO_MEGABYTE)
                         .addOnSuccessListener { bytes ->
                             val bitmap =
                                 BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
