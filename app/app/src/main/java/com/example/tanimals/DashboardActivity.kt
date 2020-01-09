@@ -38,5 +38,9 @@ class DashboardActivity : AppCompatActivity() {
         findMatchesBut.setOnClickListener{
             startActivity(Intent(this, SwipeActivity::class.java))
         }
+
+        chatBut.setOnClickListener{
+            startActivity(Intent(this, ChatListActivity::class.java))
+        }
     }
 }
