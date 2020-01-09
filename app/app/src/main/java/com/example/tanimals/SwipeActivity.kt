@@ -50,6 +50,9 @@ class SwipeActivity : AppCompatActivity() {
             nextProfile()
         }
 
+    }
+
+    private fun setFirst(){
         try {
             if(userIdList.isNotEmpty()){
                 if (user?.uid != userIdList[userIdCounter]) {
@@ -69,8 +72,6 @@ class SwipeActivity : AppCompatActivity() {
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
         }
-
-
     }
 
     private fun putUseridInArray() {
@@ -82,6 +83,7 @@ class SwipeActivity : AppCompatActivity() {
                         if (!userIdList.contains(document.id))
                             userIdList.add(document.id)
                     }
+                    setFirst()
                 }
 
         } catch (e: NullPointerException) {
