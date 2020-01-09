@@ -6,61 +6,97 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
 class SwipeActivity : AppCompatActivity() {
-    lateinit var profilePic : ImageView;
-    lateinit var animalName: TextView;
-    lateinit var animalGender: TextView;
-    lateinit var animalLocation: TextView;
-    lateinit var animalRace : TextView;
-    lateinit var animalAge : TextView;
-    lateinit var likeB : Button;
-    lateinit var dislikeB : Button;
-    private val db = FirebaseFirestore.getInstance();
-    val user = FirebaseAuth.getInstance().currentUser;
-    val documentMap : HashMap<String,String> =  HashMap<String,String>();
+    private lateinit var profilePic : ImageView
+    private lateinit var animalName: TextView
+    private lateinit var animalGender: TextView
+    private lateinit var animalLocation: TextView
+    private lateinit var animalRace : TextView
+    private lateinit var animalAge : TextView
+    private lateinit var likeB : Button
+    private lateinit var dislikeB : Button
+    private val db = FirebaseFirestore.getInstance()
+    private val userIdList : ArrayList<String> =  ArrayList()
+    private var userIdCounter : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_swipe)
 
-        profilePic = findViewById(R.id.avatar_Animal);
-        animalName = findViewById(R.id.name_Animal);
-        animalGender = findViewById(R.id.gender_Animal);
-        animalLocation = findViewById(R.id.location_Animal);
-        animalRace = findViewById(R.id.race_Animal);
-        animalAge = findViewById(R.id.age_Animal);
-        likeB = findViewById(R.id.button_Like);
-        dislikeB = findViewById(R.id.button_Dislike);
+        profilePic = findViewById(R.id.avatar_Animal)
+        animalName = findViewById(R.id.name_Animal)
+        animalGender = findViewById(R.id.gender_Animal)
+        animalLocation = findViewById(R.id.location_Animal)
+        animalRace = findViewById(R.id.race_Animal)
+        animalAge = findViewById(R.id.age_Animal)
+        likeB = findViewById(R.id.button_Like)
+        dislikeB = findViewById(R.id.button_Dislike)
+        putUseridInArray()
 
-        // keeps giving nullpointer exception
-        fun nextProfile(){
-            val docRef = db.collection("user").document(user!!.uid)
+        dislikeB.setOnClickListener{
+            // TODO: should stop disliked profile from returning
+            nextProfile()
+        }
+
+        likeB.setOnClickListener{
+            // TODO: store like and match if both user like each other
+            // TODO: user shouldn't be able to like itself , require account credentials to properly work
+            nextProfile()
+        }
+    }
+
+    private fun putUseridInArray(){
+        try {
             db.collection("user")
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        Log.d(null, "${document.id} => ${document.data}")
-                        ///make sure array works
-                        documentMap["${document.id}"] = "${document.data}";
-
+                        if(!userIdList.contains(document.id))
+                            userIdList.add(document.id)
                     }
                 }
-        }
 
-        dislikeB.setOnClickListener{
-            // skip to next profile in firebase
-            likeB.text = "WIlly Small BOy";
-            nextProfile();
-        }
-
-        likeB.setOnClickListener{
-            // store like and match if both user like eachother
-            dislikeB.text = "WIlly Big BOy";
-            nextProfile();
+        }catch (e: NullPointerException){
+            Log.d(null, "array didn't store")
         }
     }
+
+    private fun nextProfile(){
+        Log.d(null, userIdCounter.toString())
+        Log.d(null, userIdList.size.toString())
+        counterLimiter()
+        try {
+            db.collection("user").document(userIdList[userIdCounter])
+            .get()
+                .addOnSuccessListener { document ->
+                    animalName.text = document.data?.get("name").toString()
+                    animalGender.text = document.data?.get("gender").toString()
+                    animalLocation.text = document.data?.get("location").toString()
+                    animalRace.text = document.data?.get("race").toString()
+                    animalAge.text = document.data?.get("dob").toString()
+
+                }
+        }catch (e: NullPointerException){
+            Log.d(null, "array didn't store")
+        }
+
+    }
+
+    fun likeAndMatches(){
+
+    }
+
+    private fun counterLimiter(){
+        if(userIdCounter < userIdList.size-1){
+            userIdCounter += 1
+            Log.d(null, "adding")
+        }else{
+            Log.d(null, "zeroing")
+            userIdCounter = 0
+        }
+    }
+
 }
