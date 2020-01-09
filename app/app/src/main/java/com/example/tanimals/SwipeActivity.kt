@@ -6,6 +6,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 
 
@@ -20,6 +21,7 @@ class SwipeActivity : AppCompatActivity() {
     private lateinit var dislikeB : Button
     private val db = FirebaseFirestore.getInstance()
     private val userIdList : ArrayList<String> =  ArrayList()
+    private val user = FirebaseAuth.getInstance().currentUser
     private var userIdCounter : Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +45,6 @@ class SwipeActivity : AppCompatActivity() {
 
         likeB.setOnClickListener{
             // TODO: store like and match if both user like each other
-            // TODO: user shouldn't be able to like itself , require account credentials to properly work
             nextProfile()
         }
     }
@@ -65,20 +66,21 @@ class SwipeActivity : AppCompatActivity() {
     }
 
     private fun nextProfile(){
-        Log.d(null, userIdCounter.toString())
-        Log.d(null, userIdList.size.toString())
         counterLimiter()
         try {
-            db.collection("user").document(userIdList[userIdCounter])
-            .get()
-                .addOnSuccessListener { document ->
-                    animalName.text = document.data?.get("name").toString()
-                    animalGender.text = document.data?.get("gender").toString()
-                    animalLocation.text = document.data?.get("location").toString()
-                    animalRace.text = document.data?.get("race").toString()
-                    animalAge.text = document.data?.get("dob").toString()
-
-                }
+            if(user?.uid != userIdList[userIdCounter]){
+                db.collection("user").document(userIdList[userIdCounter])
+                .get()
+                    .addOnSuccessListener { document ->
+                        animalName.text = document.data?.get("name").toString()
+                        animalGender.text = document.data?.get("gender").toString()
+                        animalLocation.text = document.data?.get("location").toString()
+                        animalRace.text = document.data?.get("race").toString()
+                        animalAge.text = document.data?.get("dob").toString()
+                    }
+                }else{
+                counterLimiter()
+            }
         }catch (e: NullPointerException){
             Log.d(null, "array didn't store")
         }
@@ -92,9 +94,7 @@ class SwipeActivity : AppCompatActivity() {
     private fun counterLimiter(){
         if(userIdCounter < userIdList.size-1){
             userIdCounter += 1
-            Log.d(null, "adding")
         }else{
-            Log.d(null, "zeroing")
             userIdCounter = 0
         }
     }
