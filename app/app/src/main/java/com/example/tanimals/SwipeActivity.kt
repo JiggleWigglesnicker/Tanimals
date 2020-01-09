@@ -1,5 +1,7 @@
 package com.example.tanimals
 
+import android.content.Intent
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -9,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
 
 
 class SwipeActivity : AppCompatActivity() {
@@ -23,6 +26,9 @@ class SwipeActivity : AppCompatActivity() {
     private val db = FirebaseFirestore.getInstance()
     private val userIdList: ArrayList<String> = ArrayList()
     private val user = FirebaseAuth.getInstance().currentUser
+    private val storage = FirebaseStorage.getInstance()
+    private val storageRef = storage.reference
+    private var animalImageref = storageRef.child("users/"+ user!!.uid +"/profilePicture.png")
     private var userIdCounter: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,6 +58,17 @@ class SwipeActivity : AppCompatActivity() {
 
     }
 
+    fun picDownload() {
+        val TWO_MEGABYTE = 2048 * 2048.toLong()
+        animalImageref.getBytes(TWO_MEGABYTE)
+            .addOnSuccessListener { bytes ->
+                val bitmap =
+                    BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                    profilePic.setImageBitmap(bitmap)
+            }.addOnFailureListener {
+                // Handle any errors
+            }
+    }
     private fun setFirst(){
         try {
             if(userIdList.isNotEmpty()){
@@ -59,6 +76,7 @@ class SwipeActivity : AppCompatActivity() {
                     db.collection("user").document(userIdList[userIdCounter])
                         .get()
                         .addOnSuccessListener { document ->
+                            picDownload();
                             animalName.text = document.data?.get("name").toString()
                             animalGender.text = document.data?.get("gender").toString()
                             animalLocation.text = document.data?.get("location").toString()
@@ -80,7 +98,7 @@ class SwipeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        if (!userIdList.contains(document.id))
+                        if (!userIdList.contains(document.id) && document.id != user?.uid )
                             userIdList.add(document.id)
                     }
                     setFirst()
@@ -91,22 +109,24 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: user are show twice in some cases
     private fun nextProfile() {
         counterLimiter()
         try {
+            Log.d(null, userIdList.size.toString())
+            Log.d(null, userIdCounter.toString())
+            Log.d(null, userIdList.toString())
             if (user?.uid != userIdList[userIdCounter]) {
                 db.collection("user").document(userIdList[userIdCounter])
                     .get()
                     .addOnSuccessListener { document ->
+                        picDownload();
                         animalName.text = document.data?.get("name").toString()
                         animalGender.text = document.data?.get("gender").toString()
                         animalLocation.text = document.data?.get("location").toString()
                         animalRace.text = document.data?.get("race").toString()
                         animalAge.text = document.data?.get("dob").toString()
                     }
-            } else {
-                counterLimiter()
+
             }
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
@@ -131,7 +151,7 @@ class SwipeActivity : AppCompatActivity() {
         if (userIdCounter < userIdList.size - 1) {
             userIdCounter += 1
         } else {
-            userIdCounter = 0
+            startActivity(Intent(this, DashboardActivity::class.java))
         }
     }
 
