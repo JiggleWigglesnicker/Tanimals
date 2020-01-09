@@ -34,5 +34,9 @@ class DashboardActivity : AppCompatActivity() {
         profilebut.setOnClickListener{
             startActivity(Intent(this, ProfileActivity::class.java))
         }
+
+        findMatchesBut.setOnClickListener{
+            startActivity(Intent(this, SwipeActivity::class.java))
+        }
     }
 }
