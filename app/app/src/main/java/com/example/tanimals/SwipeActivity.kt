@@ -38,7 +38,6 @@ class SwipeActivity : AppCompatActivity() {
         likeB = findViewById(R.id.button_Like)
         dislikeB = findViewById(R.id.button_Dislike)
         putUseridInArray()
-        nextProfile()
 
         dislikeB.setOnClickListener {
             // TODO: should stop disliked profile from returning
@@ -49,6 +48,24 @@ class SwipeActivity : AppCompatActivity() {
             // TODO: store like and match if both user like each other
             likeAndMatches()
             nextProfile()
+        }
+
+        try {
+            if (user?.uid != userIdList[userIdCounter]) {
+                db.collection("user").document(userIdList[userIdCounter])
+                    .get()
+                    .addOnSuccessListener { document ->
+                        animalName.text = document.data?.get("name").toString()
+                        animalGender.text = document.data?.get("gender").toString()
+                        animalLocation.text = document.data?.get("location").toString()
+                        animalRace.text = document.data?.get("race").toString()
+                        animalAge.text = document.data?.get("dob").toString()
+                    }
+            } else {
+                counterLimiter()
+            }
+        } catch (e: NullPointerException) {
+            Log.d(null, "array didn't store")
         }
 
 
@@ -70,8 +87,9 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
+    // TODO: user are show twice in some cases
     private fun nextProfile() {
-        //counterLimiter()
+        counterLimiter()
         try {
             if (user?.uid != userIdList[userIdCounter]) {
                 db.collection("user").document(userIdList[userIdCounter])
@@ -92,6 +110,7 @@ class SwipeActivity : AppCompatActivity() {
 
     }
 
+    // TODO: likes not appearing in documents
     fun likeAndMatches() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to true)
