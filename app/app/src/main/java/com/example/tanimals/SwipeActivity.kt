@@ -38,6 +38,7 @@ class SwipeActivity : AppCompatActivity() {
         likeB = findViewById(R.id.button_Like)
         dislikeB = findViewById(R.id.button_Dislike)
         putUseridInArray()
+        nextProfile()
 
         dislikeB.setOnClickListener {
             // TODO: should stop disliked profile from returning
@@ -50,15 +51,7 @@ class SwipeActivity : AppCompatActivity() {
             nextProfile()
         }
 
-        db.collection("user").document(userIdList[userIdCounter])
-            .get()
-            .addOnSuccessListener { document ->
-                animalName.text = document.data?.get("name").toString()
-                animalGender.text = document.data?.get("gender").toString()
-                animalLocation.text = document.data?.get("location").toString()
-                animalRace.text = document.data?.get("race").toString()
-                animalAge.text = document.data?.get("dob").toString()
-            }
+
     }
 
     private fun putUseridInArray() {
@@ -78,7 +71,7 @@ class SwipeActivity : AppCompatActivity() {
     }
 
     private fun nextProfile() {
-        counterLimiter()
+        //counterLimiter()
         try {
             if (user?.uid != userIdList[userIdCounter]) {
                 db.collection("user").document(userIdList[userIdCounter])
