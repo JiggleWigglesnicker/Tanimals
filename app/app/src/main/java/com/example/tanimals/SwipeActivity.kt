@@ -102,8 +102,9 @@ class SwipeActivity : AppCompatActivity() {
                         if (!userIdList.contains(document.id) && document.id != user?.uid )
                             userIdList.add(document.id)
                     }
-                    visibleProfiles();
+                    visibleProfiles()
                     setFirst()
+
                 }
 
         } catch (e: NullPointerException) {
@@ -134,7 +135,7 @@ class SwipeActivity : AppCompatActivity() {
 
     }
 
-    // TODO: likes not appearing in documents
+
     fun likeAndMatches() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to true)
@@ -159,14 +160,19 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
-    // TODO: doesnt remove profile that has already been liked/disliked
+    // TODO: doesnt EXIT Swipe Activity when userIdList is empty
     fun visibleProfiles(){
-        db.collection("match").document(user!!.uid)
+        var x : Int = 0;
+        var matchRef = db.collection("match");
+        matchRef.document(user!!.uid)
             .get()
             .addOnSuccessListener { document ->
-                Log.d(null, document.data?.keys.toString())
-                for(id in document.data?.keys.toString()){
-
+                while(!document.data?.isEmpty()!!){
+                    if(document.data?.containsKey(userIdList[x])!! && userIdList.size > 0 && x > 0){
+                        userIdList.removeAt(x)
+                    }else if (userIdList.isEmpty()){
+                        startActivity(Intent(this, DashboardActivity::class.java))
+                    }
                 }
                 Log.d(null, userIdList.toString())
         }.addOnFailureListener { exception ->
