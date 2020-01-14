@@ -8,6 +8,7 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.util.rangeTo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
@@ -24,7 +25,7 @@ class SwipeActivity : AppCompatActivity() {
     private lateinit var likeB: Button
     private lateinit var dislikeB: Button
     private val db = FirebaseFirestore.getInstance()
-    private val userIdList: ArrayList<String> = ArrayList()
+    private var userIdList: ArrayList<String> = ArrayList()
     private val user = FirebaseAuth.getInstance().currentUser
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
@@ -46,12 +47,11 @@ class SwipeActivity : AppCompatActivity() {
         putUseridInArray()
 
         dislikeB.setOnClickListener {
-            // TODO: should stop disliked profile from returning
+            dislikeAndMatches()
             nextProfile()
         }
 
         likeB.setOnClickListener {
-            // TODO: store like and match if both user like each other
             likeAndMatches()
             nextProfile()
         }
@@ -102,6 +102,7 @@ class SwipeActivity : AppCompatActivity() {
                         if (!userIdList.contains(document.id) && document.id != user?.uid )
                             userIdList.add(document.id)
                     }
+                    visibleProfiles();
                     setFirst()
                 }
 
@@ -113,9 +114,6 @@ class SwipeActivity : AppCompatActivity() {
     private fun nextProfile() {
         counterLimiter()
         try {
-            Log.d(null, userIdList.size.toString())
-            Log.d(null, userIdCounter.toString())
-            Log.d(null, userIdList.toString())
             if (user?.uid != userIdList[userIdCounter]) {
                 db.collection("user").document(userIdList[userIdCounter])
                     .get()
@@ -149,10 +147,41 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
+    fun dislikeAndMatches() {
+        try {
+            val data = hashMapOf(userIdList[userIdCounter] to false)
+            user?.uid?.let {
+                db.collection("match").document(it)
+                    .set(data, SetOptions.merge())
+            }
+        } catch (e: java.lang.NullPointerException) {
+
+        }
+    }
+
+    // TODO: doesnt remove profile that has already been liked/disliked
+    fun visibleProfiles(){
+        db.collection("match").document(user!!.uid)
+            .get()
+            .addOnSuccessListener { document ->
+                Log.d(null, document.data?.keys.toString())
+                for(id in document.data?.keys.toString()){
+
+                }
+                Log.d(null, userIdList.toString())
+        }.addOnFailureListener { exception ->
+                Log.d(null, "get failed with ", exception)
+            }
+
+
+    }
+
     private fun counterLimiter() {
         if (userIdCounter < userIdList.size - 1) {
             userIdCounter += 1
-        } else {
+        } else if(userIdList.size <= 0) {
+            startActivity(Intent(this, DashboardActivity::class.java))
+        }else{
             startActivity(Intent(this, DashboardActivity::class.java))
         }
     }
