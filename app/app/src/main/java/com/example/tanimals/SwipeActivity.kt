@@ -29,7 +29,7 @@ class SwipeActivity : AppCompatActivity() {
     private val user = FirebaseAuth.getInstance().currentUser
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
-    private var animalImageref = storageRef.child("users/"+ user!!.uid +"/profilePicture.png")
+    private var animalImageref = storageRef.child("users/" + user!!.uid + "/profilePicture.png")
     private var userIdCounter: Int = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,19 +64,21 @@ class SwipeActivity : AppCompatActivity() {
             .addOnSuccessListener { bytes ->
                 val bitmap =
                     BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-                    profilePic.setImageBitmap(bitmap)
+                profilePic.setImageBitmap(bitmap)
             }.addOnFailureListener {
                 // Handle any errors
             }
     }
-    private fun setFirst(){
+
+    private fun setFirst() {
         try {
-            if(userIdList.isNotEmpty()){
+            if (userIdList.isNotEmpty()) {
                 if (user?.uid != userIdList[userIdCounter]) {
                     db.collection("user").document(userIdList[userIdCounter])
                         .get()
                         .addOnSuccessListener { document ->
-                            animalImageref = storageRef.child("users/"+ userIdList[userIdCounter] +"/profilePicture.png")
+                            animalImageref =
+                                storageRef.child("users/" + userIdList[userIdCounter] + "/profilePicture.png")
                             picDownload();
                             animalName.text = document.data?.get("name").toString()
                             animalGender.text = document.data?.get("gender").toString()
@@ -99,7 +101,7 @@ class SwipeActivity : AppCompatActivity() {
                 .get()
                 .addOnSuccessListener { result ->
                     for (document in result) {
-                        if (!userIdList.contains(document.id) && document.id != user?.uid )
+                        if (!userIdList.contains(document.id) && document.id != user?.uid)
                             userIdList.add(document.id)
                     }
                     visibleProfiles()
@@ -119,7 +121,8 @@ class SwipeActivity : AppCompatActivity() {
                 db.collection("user").document(userIdList[userIdCounter])
                     .get()
                     .addOnSuccessListener { document ->
-                        animalImageref = storageRef.child("users/"+ userIdList[userIdCounter] +"/profilePicture.png")
+                        animalImageref =
+                            storageRef.child("users/" + userIdList[userIdCounter] + "/profilePicture.png")
                         picDownload();
                         animalName.text = document.data?.get("name").toString()
                         animalGender.text = document.data?.get("gender").toString()
@@ -161,37 +164,35 @@ class SwipeActivity : AppCompatActivity() {
     }
 
     // TODO: doesnt EXIT Swipe Activity when userIdList is empty
-    private fun visibleProfiles(){
-        var x : Int = 0;
+    private fun visibleProfiles() {
+        var x: Int = 0;
         var matchRef = db.collection("match");
-        matchRef.document(user!!.uid)
-            .get()
-            .addOnSuccessListener { document ->
-
-
-                    if(userIdList.contains(document.data?.get(userIdList[x]))){
+        while (x  < userIdList.size) {
+            matchRef.document(user!!.uid)
+                .get()
+                .addOnSuccessListener { document ->
+                    if (userIdList.contains(document.data?.get(userIdList[x]))) {
                         userIdList.removeAt(x)
                         x++
 
-                    }else if (userIdList.isEmpty()){
+                    } else if (userIdList.isEmpty()) {
                         startActivity(Intent(this, DashboardActivity::class.java))
 
                     }
-                Log.d(null, userIdList.toString())
-        }.addOnFailureListener { exception ->
-                Log.d(null, "get failed with ", exception)
-            }
+                    Log.d(null, userIdList.toString())
+                }.addOnFailureListener { exception ->
+                    Log.d(null, "get failed with ", exception)
+                }
 
 
+        }
     }
 
     private fun counterLimiter() {
-        if (userIdCounter < userIdList.size - 1) {
-            userIdCounter += 1
-        } else if(userIdList.size <= 0) {
-            startActivity(Intent(this, DashboardActivity::class.java))
-        }else{
-            startActivity(Intent(this, DashboardActivity::class.java))
+        when {
+            userIdCounter < userIdList.size - 1 -> userIdCounter += 1
+            userIdList.size <= 0 -> startActivity(Intent(this, DashboardActivity::class.java))
+            else -> startActivity(Intent(this, DashboardActivity::class.java))
         }
     }
 
