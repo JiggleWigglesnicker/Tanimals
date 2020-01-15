@@ -136,7 +136,7 @@ class SwipeActivity : AppCompatActivity() {
     }
 
 
-    fun likeAndMatches() {
+    private fun likeAndMatches() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to true)
             user?.uid?.let {
@@ -148,7 +148,7 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
-    fun dislikeAndMatches() {
+    private fun dislikeAndMatches() {
         try {
             val data = hashMapOf(userIdList[userIdCounter] to false)
             user?.uid?.let {
@@ -161,19 +161,22 @@ class SwipeActivity : AppCompatActivity() {
     }
 
     // TODO: doesnt EXIT Swipe Activity when userIdList is empty
-    fun visibleProfiles(){
+    private fun visibleProfiles(){
         var x : Int = 0;
         var matchRef = db.collection("match");
         matchRef.document(user!!.uid)
             .get()
             .addOnSuccessListener { document ->
-                while(!document.data?.isEmpty()!!){
-                    if(document.data?.containsKey(userIdList[x])!! && userIdList.size > 0 && x > 0){
+
+
+                    if(userIdList.contains(document.data?.get(userIdList[x]))){
                         userIdList.removeAt(x)
+                        x++
+
                     }else if (userIdList.isEmpty()){
                         startActivity(Intent(this, DashboardActivity::class.java))
+
                     }
-                }
                 Log.d(null, userIdList.toString())
         }.addOnFailureListener { exception ->
                 Log.d(null, "get failed with ", exception)
