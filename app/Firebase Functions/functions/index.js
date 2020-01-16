@@ -11,20 +11,6 @@ exports.modifyUser = functions.firestore
     .document('match/{userId}')
     .onWrite((change, context) => {
 
-      Object.filter = function( obj, predicate) {
-        var result = {}, key;
-        // ---------------^---- as noted by @CMS, 
-        //      always declare variables with the "var" keyword
-    
-        for (key in obj) {
-            if (obj.hasOwnProperty(key) && !predicate(obj[key])) {
-                result[key] = obj[key];
-            }
-        }
-    
-        return result;
-    };
-
       const userId = context.params.userId;
 
       // Get an object with the current document value.
@@ -43,11 +29,26 @@ exports.modifyUser = functions.firestore
         var channelName = names[0]+names[1]
 
         let data = {
-          userId: true,
+          [userId]: true,
         };
         
-        // Add a new document in collection "cities" with ID 'LA'
-        let setDoc = db.collection('chatChannel').doc(channelName).set(data);
+        const channelRef = db.collection('chatChannel').doc(channelName)
+
+        let getDoc = channelRef.get()
+          .then(doc => {
+            if (!doc.exists) {
+              let setDoc = channelRef.set(data);
+              console.log("set")
+            } else {
+              let updateSingle = channelRef.update({[userId]: true});
+              console.log("update")
+            }
+            return null
+          })
+          .catch(err => {
+            console.log('Error getting document', err);
+          });
+
       }
       return 0
     });
