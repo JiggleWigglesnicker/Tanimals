@@ -38,10 +38,8 @@ exports.modifyUser = functions.firestore
           .then(doc => {
             if (!doc.exists) {
               let setDoc = channelRef.set(data);
-              console.log("set")
             } else {
               let updateSingle = channelRef.update({[userId]: true});
-              console.log("update")
             }
             return null
           })
