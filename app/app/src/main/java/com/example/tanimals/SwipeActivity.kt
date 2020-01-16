@@ -26,6 +26,7 @@ class SwipeActivity : AppCompatActivity() {
     private lateinit var dislikeB: Button
     private val db = FirebaseFirestore.getInstance()
     private var userIdList: ArrayList<String> = ArrayList()
+    private var userMatchList: ArrayList<String> = ArrayList()
     private val user = FirebaseAuth.getInstance().currentUser
     private val storage = FirebaseStorage.getInstance()
     private val storageRef = storage.reference
@@ -164,28 +165,29 @@ class SwipeActivity : AppCompatActivity() {
     }
 
     // TODO: doesnt EXIT Swipe Activity when userIdList is empty
-    private fun visibleProfiles() {
-        var x: Int = 0;
+    private fun getMatchProfilesInArray() {
         var matchRef = db.collection("match");
-        while (x  < userIdList.size) {
-            matchRef.document(user!!.uid)
-                .get()
+            matchRef.document(user!!.uid).get()
                 .addOnSuccessListener { document ->
-                    if (userIdList.contains(document.data?.get(userIdList[x]))) {
-                        userIdList.removeAt(x)
-                        x++
-
-                    } else if (userIdList.isEmpty()) {
-                        startActivity(Intent(this, DashboardActivity::class.java))
-
+                    document.data?.keys?.forEach { key ->
+                        userMatchList.add(key);
                     }
-                    Log.d(null, userIdList.toString())
+                    Log.d("", userMatchList.toString())
                 }.addOnFailureListener { exception ->
                     Log.d(null, "get failed with ", exception)
                 }
 
+    }
 
+    private fun visibleProfiles(){
+        getMatchProfilesInArray()
+        userMatchList.forEach { id ->
+            if(userIdList.contains(id)){
+                userIdList.remove(id);
+            }
+            Log.d("willu", userIdList.toString())
         }
+
     }
 
     private fun counterLimiter() {
