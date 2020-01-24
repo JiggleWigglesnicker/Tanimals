@@ -40,7 +40,7 @@ class DashboardActivity : AppCompatActivity() {
         }
 
         chatBut.setOnClickListener{
-            startActivity(Intent(this, ChatListActivity::class.java))
+            startActivity(Intent(this, ChatActivity::class.java))
         }
     }
 }
