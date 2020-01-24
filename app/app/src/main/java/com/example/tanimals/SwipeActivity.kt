@@ -172,7 +172,7 @@ class SwipeActivity : AppCompatActivity() {
                     document.data?.keys?.forEach { key ->
                         userMatchList.add(key);
                     }
-                    Log.d("", userMatchList.toString())
+//                    Log.d("", userMatchList.toString())
                 }.addOnFailureListener { exception ->
                     Log.d(null, "get failed with ", exception)
                 }
@@ -185,7 +185,7 @@ class SwipeActivity : AppCompatActivity() {
             if(userIdList.contains(id)){
                 userIdList.remove(id);
             }
-            Log.d("willu", userIdList.toString())
+//            Log.d("willu", userIdList.toString())
         }
 
     }
