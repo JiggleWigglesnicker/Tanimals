@@ -1,5 +1,6 @@
 package com.example.tanimals
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
@@ -102,8 +103,15 @@ class ChatActivity : AppCompatActivity() {
             }
             false
         })
+    }
 
+    private val PICK_DATE_REQUEST = 1 // The request code.
+    // ...
+    fun pickContact(v: View) {
 
+        val pickDateIntent = Intent(this,weatherPicker::class.java )
+
+        startActivityForResult(pickDateIntent, PICK_DATE_REQUEST)
     }
 
 }

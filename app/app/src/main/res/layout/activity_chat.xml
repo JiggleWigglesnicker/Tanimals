@@ -38,8 +38,8 @@
 
     <LinearLayout
         android:id="@+id/layout_chatbox"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="372dp"
+        android:layout_height="462dp"
         android:background="#ffffff"
         android:minHeight="48dp"
         android:orientation="horizontal"
@@ -56,23 +56,34 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:text="Messages received will be displayed here" />
+            android:text="@string/messagePlaceHolder" />
 
     </LinearLayout>
 
     <EditText
         android:id="@+id/editTextPublish"
-        android:layout_width="wrap_content"
-        android:layout_height="45dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="291dp"
+        android:layout_height="53dp"
+        android:layout_marginStart="16dp"
         android:layout_marginBottom="8dp"
+        android:autofillHints=""
         android:ems="10"
-        android:hint="Enter message to send"
+        android:hint="@string/messageSendPlaceHolder"
         android:inputType="text|textPersonName"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_chatbox" />
+        app:layout_constraintTop_toBottomOf="@+id/layout_chatbox"
+        app:layout_constraintVertical_bias="0.868" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="69dp"
+        android:layout_height="52dp"
+        android:layout_marginEnd="8dp"
+        android:onClick="pickContact"
+        android:text="@string/weatherpicker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/editTextPublish"
+        app:layout_constraintTop_toTopOf="@+id/editTextPublish" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

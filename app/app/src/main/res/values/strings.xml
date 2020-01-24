@@ -44,4 +44,10 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="messagePlaceHolder">Messages received will be displayed here</string>
+    <string name="messageSendPlaceHolder">Enter message to send</string>
+    <string name="weatherpicker">🌞</string>
+    <string name="sendLocation">Send</string>
+    <string name="view_weather_data">View Weather</string>
+    <string name="city_name_placeholder">City name</string>
 </resources>

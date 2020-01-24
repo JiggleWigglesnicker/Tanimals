@@ -19,6 +19,10 @@ buildscript {
     }
 }
 
+plugins {
+    id("nebula.lint") version "16.0.2"
+}
+
 allprojects {
     repositories {
         google()
@@ -30,3 +34,5 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+gradleLint.rules = ['all-dependency']
