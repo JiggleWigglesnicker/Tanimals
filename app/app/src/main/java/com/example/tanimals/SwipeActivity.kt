@@ -133,6 +133,7 @@ class SwipeActivity : AppCompatActivity() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun nextProfile() {
         counterLimiter()
         try {
@@ -140,14 +141,16 @@ class SwipeActivity : AppCompatActivity() {
                 db.collection("user").document(userIdList[userIdCounter])
                     .get()
                     .addOnSuccessListener { document ->
+                        val dob = document.data?.get("dob").toString()
+
                         animalImageref =
                             storageRef.child("users/" + userIdList[userIdCounter] + "/profilePicture.png")
                         picDownload();
                         animalName.text = document.data?.get("name").toString()
                         animalGender.text = document.data?.get("gender").toString()
-                        animalLocation.text = document.data?.get("location").toString()
+                        animalLocation.text = document.data?.get("place").toString()
                         animalRace.text = document.data?.get("race").toString()
-                        animalAge.text = document.data?.get("dob").toString()
+                        animalAge.text = "Age: " + getAge(dob.substring(4).toInt(),dob.substring(2,3).toInt(),dob.substring(0,1).toInt())
                     }
 
             }
