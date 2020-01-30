@@ -12,6 +12,4 @@ class weatherPicker : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weather_picker)
     }
-
-
 }

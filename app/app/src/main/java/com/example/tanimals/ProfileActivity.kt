@@ -17,6 +17,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.storage.FirebaseStorage
+import kotlinx.android.synthetic.main.activity_profile.*
 import java.io.ByteArrayOutputStream
 import kotlin.math.roundToInt
 
@@ -51,7 +52,9 @@ class ProfileActivity : AppCompatActivity() {
         dateField = findViewById(R.id.dateOfBirth)
         placeField = findViewById(R.id.address)
         genderGroup = findViewById(R.id.radioGroup)
-        genderGroup.check("2131296381".toInt())
+        val gender1 : RadioButton = findViewById(R.id.gender1)
+        val gender2 : RadioButton = findViewById(R.id.gender2)
+        val gender3 : RadioButton = findViewById(R.id.gender3)
 
 
         val docRef = db.collection("user").document(user!!.uid)
@@ -72,7 +75,18 @@ class ProfileActivity : AppCompatActivity() {
                     nameField.setText(document.data?.get("name").toString())
                     dateField.setText(document.data?.get("dob").toString().replace(Regex("(..)(..)(....)"), "\$1-\$2-\$3"))
                     placeField.setText(document.data?.get("place").toString())
-                    genderGroup.check(document.data?.get("gender").toString().toInt())
+
+                    when {
+                        gender1.text == document.data?.get("gender").toString() -> {
+                            gender1.isChecked = true
+                        }
+                        gender2.text == document.data?.get("gender").toString() -> {
+                            gender2.isChecked = true
+                        }
+                        else -> {
+                            gender3.isChecked = true
+                        }
+                    }
                 }
             }
         dateField.addTextChangedListener(object : TextWatcher {
@@ -111,7 +125,8 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     fun saveProfile(v: View) {
-        val checkedRadio = genderGroup.checkedRadioButtonId
+        val checkedRadio: RadioButton = findViewById(genderGroup.checkedRadioButtonId)
+
 
         if(nameField.text.toString() == "" || dateField.text.toString() == "" || spinner.selectedItem == null || placeField.text.toString() == ""){
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show()
@@ -122,7 +137,7 @@ class ProfileActivity : AppCompatActivity() {
             "dob" to dateField.text.toString().filter { it.isDigit() },
             "race" to spinner.selectedItem.toString().filter { it.isLetter() },
             "place" to placeField.text.toString().filter { it.isLetter() },
-            "gender" to checkedRadio
+            "gender" to checkedRadio.text
         )
 
         if (user != null) {
