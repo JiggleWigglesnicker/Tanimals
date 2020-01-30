@@ -1,5 +1,6 @@
 package com.example.tanimals
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,11 +9,12 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.util.rangeTo
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class SwipeActivity : AppCompatActivity() {
@@ -71,6 +73,7 @@ class SwipeActivity : AppCompatActivity() {
             }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setFirst() {
         try {
             if (userIdList.isNotEmpty()) {
@@ -78,14 +81,17 @@ class SwipeActivity : AppCompatActivity() {
                     db.collection("user").document(userIdList[userIdCounter])
                         .get()
                         .addOnSuccessListener { document ->
+                            val dob = document.data?.get("dob").toString()
+
+
                             animalImageref =
                                 storageRef.child("users/" + userIdList[userIdCounter] + "/profilePicture.png")
                             picDownload();
-                            animalName.text = document.data?.get("name").toString()
-                            animalGender.text = document.data?.get("gender").toString()
-                            animalLocation.text = document.data?.get("location").toString()
-                            animalRace.text = document.data?.get("race").toString()
-                            animalAge.text = document.data?.get("dob").toString()
+                            animalName.text = "Name: " + document.data?.get("name").toString()
+                            animalGender.text = "Gender: " + document.data?.get("gender").toString()
+                            animalLocation.text = "Location: " + document.data?.get("place").toString()
+                            animalRace.text = "Breed: " + document.data?.get("race").toString()
+                            animalAge.text = "Age: " + getAge(dob.substring(4).toInt(),dob.substring(2,3).toInt(),dob.substring(0,1).toInt())
                         }
                 } else {
                     counterLimiter()
@@ -94,6 +100,18 @@ class SwipeActivity : AppCompatActivity() {
         } catch (e: NullPointerException) {
             Log.d(null, "array didn't store")
         }
+    }
+
+    private fun getAge(year: Int, month: Int, day: Int): String? {
+        val dob: Calendar = Calendar.getInstance()
+        val today: Calendar = Calendar.getInstance()
+        dob.set(year, month, day)
+        var age: Int = today.get(Calendar.YEAR) - dob.get(Calendar.YEAR)
+        if (today.get(Calendar.DAY_OF_YEAR) < dob.get(Calendar.DAY_OF_YEAR)) {
+            age--
+        }
+        val ageInt = age
+        return ageInt.toString()
     }
 
     private fun putUseridInArray() {
